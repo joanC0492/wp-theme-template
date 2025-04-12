@@ -1,0 +1,25 @@
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos temporales de editores
+*.swp
+*.swo
+*.swn
+*.bak
+*.tmp
+
+# Node.js (si llegás a usarlo en el futuro)
+node_modules/
+npm-debug.log
+
+# SCSS cache (si usás compiladores como Dart Sass)
+.sass-cache/
+*.sass-cache
+
+# Archivos de logs
+*.log
+
+# Archivos comprimidos
+*.zip
+*.tar.gz

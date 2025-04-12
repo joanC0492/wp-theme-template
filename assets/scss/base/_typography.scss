@@ -1,0 +1,48 @@
+// Tipografías base que complementan Bootstrap
+body {
+  font-family: 'Open Sans', system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+}
+
+// Estilos para títulos (se integran con Bootstrap)
+h1, .h1 {
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  
+  &.entry-title { // Título de entradas/páginas en WordPress
+    color: $primary;
+    border-bottom: 2px solid $primary;
+    padding-bottom: 0.5rem;
+  }
+}
+
+// Ajustes para contenido de WordPress
+.entry-content {
+  h2 {
+    // @extend .h2;
+    margin-top: 2rem;
+  }
+  
+  p {
+    margin-bottom: 1.5rem;
+  }
+  
+  ul:not([class]) {
+    // @extend .list-unstyled;
+    li {
+      // @extend .mb-2;
+      &::before {
+        content: "•";
+        color: $primary;
+        margin-right: 0.5rem;
+      }
+    }
+  }
+}
+
+// Bloques de Gutenberg
+.wp-block-quote {
+  // @extend .blockquote;
+  border-left: 4px solid $primary;
+  padding-left: 1rem;
+}

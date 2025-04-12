@@ -1,0 +1,88 @@
+// =============================================================================
+// MIXINS: ELEMENTOS DE INTERFAZ
+// =============================================================================
+/// Genera flechas CSS puras para menús desplegables
+/// @param {String} $direction [down] - Dirección de la flecha (down|right)
+/// @output Propiedades CSS para crear triángulo
+/// @requires $nav-arrow-size - Tamaño base de la flecha
+/// @requires $nav-arrow-margin - Margen de alineación
+@mixin dropdown-arrow($direction: down) {
+  display: inline-block;
+  margin-left: $nav-arrow-margin;
+  vertical-align: $nav-arrow-margin;
+  content: "";
+  // =====================
+  // Variantes de Dirección
+  // =====================
+  @if $direction == down {
+    border-top: $nav-arrow-size solid;
+    border-right: $nav-arrow-size solid transparent;
+    border-bottom: 0;
+    border-left: $nav-arrow-size solid transparent;
+  } @else if $direction == right {
+    border-top: $nav-arrow-size solid transparent;
+    border-right: 0;
+    border-bottom: $nav-arrow-size solid transparent;
+    border-left: $nav-arrow-size solid;
+  }
+}
+
+// =============================================================================
+// MIXINS: SISTEMA DE ESPACIADOS RESPONSIVOS
+// =============================================================================
+/// Genera utilidades de margen y padding responsive
+/// @param {String} $infix - Prefijo de breakpoint (ej: '-md', '-lg')
+/// @output Clases CSS con !important (ej: .mt-6, .px-lg-8)
+/// @requires $custom-spacers - Map de espaciados personalizados
+/// @requires $grid-breakpoints - Map de breakpoints
+@mixin generate-responsive-spacers($infix: "") {
+  @each $num, $size in $custom-spacers {
+    // =====================
+    // Utilidades de Margen
+    // =====================
+    .mt#{$infix}-#{$num} {
+      margin-top: $size !important;
+    }
+    .mb#{$infix}-#{$num} {
+      margin-bottom: $size !important;
+    }
+    .ms#{$infix}-#{$num} {
+      margin-left: $size !important;
+    }
+    .me#{$infix}-#{$num} {
+      margin-right: $size !important;
+    }
+    .mx#{$infix}-#{$num} {
+      margin-left: $size !important;
+      margin-right: $size !important;
+    }
+    .my#{$infix}-#{$num} {
+      margin-top: $size !important;
+      margin-bottom: $size !important;
+    }
+    // ======================
+    // Utilidades de Padding
+    // ======================
+    .pt#{$infix}-#{$num} {
+      padding-top: $size !important;
+    }
+    .pb#{$infix}-#{$num} {
+      padding-bottom: $size !important;
+    }
+    .ps#{$infix}-#{$num} {
+      padding-left: $size !important;
+    }
+    .pe#{$infix}-#{$num} {
+      padding-right: $size !important;
+    }
+    .px#{$infix}-#{$num} {
+      padding-left: $size !important;
+      padding-right: $size !important;
+    }
+    .py#{$infix}-#{$num} {
+      padding-top: $size !important;
+      padding-bottom: $size !important;
+    }
+  }
+}
+

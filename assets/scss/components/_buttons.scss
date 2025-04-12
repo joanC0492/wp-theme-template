@@ -1,0 +1,13 @@
+// Extiende botones de Bootstrap
+.btn-wordpress {
+  // @extend .btn;
+  // @extend .btn-primary;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+// Corrección para botones de Gutenberg
+.wp-block-button__link {
+  // @extend .btn;
+  // @extend .btn-primary;
+}

@@ -1,0 +1,14 @@
+.site-header {
+  background: $primary;
+  height: $wp-header-height;
+  
+  .navbar {
+    // Sobreescribe navbar de Bootstrap
+    padding: 0;
+  }
+  
+  .custom-logo {
+    height: 50px;
+    width: auto;
+  }
+}

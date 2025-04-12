@@ -1,0 +1,114 @@
+// Variables para colores y transiciones
+$primary-bg: #ccc;
+$secondary-bg: #f89090;
+$transition-duration: 0.35s;
+$submenu-width: 150px;
+$padding-inline: 16px;
+
+// =============================================================================
+// Componente: Menú WordPress
+// =============================================================================
+.menu {
+  &-item {
+    position: relative;
+
+    &-has-children {
+      > .nav-link {
+        &::after {
+          @include dropdown-arrow(down);
+        }
+      }
+
+      > .sub-menu {
+        position: absolute;
+
+        .menu-item {
+          &-has-children {
+            > .nav-link {
+              &::after {
+                @include dropdown-arrow(right);
+                position: relative;
+                top: 0.2rem;
+                left: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// =============================================================================
+// Componente: Menú WordPress Bootstrap Personalizado
+// =============================================================================
+.navbar-jc {
+  .nav-link {
+    line-height: 1.2;
+  }
+  // Submenú general
+  .sub-menu {
+    transition: all $transition-duration ease-in-out;
+    width: $submenu-width;
+
+    .nav-link {
+      padding-inline: $padding-inline;
+      padding-left: calc(1rem * 1.5);
+      padding-right: calc(1rem * 1.5);
+    }
+  }
+
+  // Items de menú directos
+  > .menu-item {
+    > .nav-link {
+      padding-left: calc(1rem * 1.75);
+      padding-right: calc(1rem * 1.75);
+    }
+    > .sub-menu {
+      transform-origin: top;
+      transform: scaleY(0);
+      opacity: 0;
+
+      // Items de submenú
+      .menu-item {
+        > .nav-link {
+          background-color: $primary-bg;
+          transition: background-color $transition-duration ease-in-out;
+          &:hover {
+            background-color: darken($primary-bg, 10%);
+          }
+        }
+
+        // Submenús anidados
+        .sub-menu {
+          transform-origin: left;
+          transform: scaleX(0);
+          left: 100%;
+          top: 0;
+          opacity: 0;
+
+          .menu-item > .nav-link {
+            background-color: $secondary-bg;
+            transition: background-color $transition-duration ease-in-out;
+
+            &:hover {
+              background-color: darken($secondary-bg, 10%);
+            }
+          }
+        }
+
+        // Mostrar submenú al hover
+        &:hover > .sub-menu {
+          transform: scaleX(1);
+          opacity: 1;
+        }
+      }
+    }
+
+    // Mostrar primer nivel de submenú al hover
+    &:hover > .sub-menu {
+      transform: scaleY(1);
+      opacity: 1;
+    }
+  }
+}
