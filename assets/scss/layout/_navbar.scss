@@ -20,7 +20,10 @@ $padding-inline: 16px;
       }
 
       > .sub-menu {
-        position: absolute;
+        @media (min-width: 992px) {
+          position: absolute;
+          z-index: 9;
+        }
 
         .menu-item {
           &-has-children {
@@ -49,7 +52,10 @@ $padding-inline: 16px;
   // Submenú general
   .sub-menu {
     transition: all $transition-duration ease-in-out;
-    width: $submenu-width;
+
+    @media (min-width: 992px) {
+      width: $submenu-width;
+    }
 
     .nav-link {
       padding-inline: $padding-inline;
@@ -64,13 +70,19 @@ $padding-inline: 16px;
       padding-left: calc(1rem * 1.75);
       padding-right: calc(1rem * 1.75);
     }
+    // SUBMENU 1ER NIVEL
     > .sub-menu {
       transform-origin: top;
       transform: scaleY(0);
       opacity: 0;
+      height: 0;
+      @media (min-width: 992px) {
+        height: initial;
+      }
 
-      // Items de submenú
+      // ITEMS DE SUBMENU 1ER NIVEL
       .menu-item {
+        // ENLACES DE SUBMENU 1ER NIVEL
         > .nav-link {
           background-color: $primary-bg;
           transition: background-color $transition-duration ease-in-out;
@@ -79,13 +91,17 @@ $padding-inline: 16px;
           }
         }
 
-        // Submenús anidados
+        // SUBMENU DEMAS NIVELES
         .sub-menu {
           transform-origin: left;
           transform: scaleX(0);
           left: 100%;
           top: 0;
           opacity: 0;
+          height: 0;
+          @media (min-width: 992px) {
+            height: initial;
+          }
 
           .menu-item > .nav-link {
             background-color: $secondary-bg;
@@ -101,6 +117,7 @@ $padding-inline: 16px;
         &:hover > .sub-menu {
           transform: scaleX(1);
           opacity: 1;
+          height: initial;
         }
       }
     }
@@ -109,6 +126,7 @@ $padding-inline: 16px;
     &:hover > .sub-menu {
       transform: scaleY(1);
       opacity: 1;
+      height: initial;
     }
   }
 }
