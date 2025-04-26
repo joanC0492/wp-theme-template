@@ -1,5 +1,6 @@
 // Variables para colores y transiciones
 $primary-bg: #ccc;
+$primary-hover-bg: #39b54a7a;
 $secondary-bg: #f89090;
 $transition-duration: 0.35s;
 $submenu-width: 150px;
@@ -48,9 +49,21 @@ $padding-inline: 16px;
 .navbar-jc {
   .nav-link {
     line-height: 1.2;
+    &:hover {
+      background-color: $primary-hover-bg;
+    }
   }
   // Submenú general
   .sub-menu {
+    // A
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    // transition: all 0.3s ease;
+    // padding-left: 1rem;
+    // list-style: none;
+    // B
     transition: all $transition-duration ease-in-out;
 
     @media (min-width: 992px) {
@@ -62,6 +75,19 @@ $padding-inline: 16px;
       padding-left: calc(1rem * 1.5);
       padding-right: calc(1rem * 1.5);
     }
+
+    // A
+    &.open {
+      max-height: 500px; /* Suficiente para cualquier contenido */
+      opacity: 1;
+      transform: translateY(0);
+    }
+    // B
+    @media(min-width: 992px){
+      max-height: initial;
+      overflow: visible;
+      // max-height: 500px;
+    }
   }
 
   // Items de menú directos
@@ -72,11 +98,12 @@ $padding-inline: 16px;
     }
     // SUBMENU 1ER NIVEL
     > .sub-menu {
-      transform-origin: top;
-      transform: scaleY(0);
-      opacity: 0;
-      height: 0;
       @media (min-width: 992px) {
+        transform-origin: top;
+        transform: scaleY(0);
+        opacity: 0;
+        height: 0;
+
         height: initial;
       }
 
@@ -93,13 +120,14 @@ $padding-inline: 16px;
 
         // SUBMENU DEMAS NIVELES
         .sub-menu {
-          transform-origin: left;
-          transform: scaleX(0);
-          left: 100%;
-          top: 0;
-          opacity: 0;
-          height: 0;
           @media (min-width: 992px) {
+            transform-origin: left;
+            transform: scaleX(0);
+            left: 100%;
+            top: 0;
+            opacity: 0;
+            height: 0;
+
             height: initial;
           }
 
@@ -115,18 +143,22 @@ $padding-inline: 16px;
 
         // Mostrar submenú al hover
         &:hover > .sub-menu {
-          transform: scaleX(1);
-          opacity: 1;
-          height: initial;
+          @media (min-width: 992px) {
+            transform: scaleX(1);
+            opacity: 1;
+            height: initial;
+          }
         }
       }
     }
 
     // Mostrar primer nivel de submenú al hover
     &:hover > .sub-menu {
-      transform: scaleY(1);
-      opacity: 1;
-      height: initial;
+      @media (min-width: 992px) {
+        transform: scaleY(1);
+        opacity: 1;
+        height: initial;
+      }
     }
   }
 }
