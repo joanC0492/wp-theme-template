@@ -1,17 +1,23 @@
 // 1. Abstracts
-@import "abstracts/index";
+// @import "abstracts/index";
+// @use "abstracts/index" as abstracts;
 
 // 2. Base
-@import "base/index";
+// @import "base/index";
+@use "base/index" as base;
 
 // 3. Components
-@import "components/index";
+// @import "components/index";
+@use "components/index" as components;
 
 // 4. Layout
-@import "layout/index";
+// @import "layout/index";
+@use "layout/index" as layout;
 
 // 5. Pages
-@import "pages/index";
+// @import "pages/index";
+@use "pages/index" as pages;
 
 // 6. Utilities
-@import "utilities/index";
+// @import "utilities/index";
+@use "utilities/index" as utilities;

@@ -1,3 +1,6 @@
-@import "header";
-@import "navbar";
-@import "footer";
+// @import "header";
+// @import "navbar";
+// @import "footer";
+@forward "header";
+@forward "navbar";
+@forward "footer";

@@ -1,6 +1,8 @@
+@use "../abstracts" as abs;
+
 .site-header {
-  background: $primary;
-  height: $wp-header-height;
+  background: abs.$primary;
+  height: abs.$wp-header-height;
   
   .navbar {
     // Sobreescribe navbar de Bootstrap

@@ -1,2 +1,4 @@
-@import "spacing";
-@import "others";
+// @import "spacing";
+// @import "others";
+@forward "spacing";
+@forward "others";

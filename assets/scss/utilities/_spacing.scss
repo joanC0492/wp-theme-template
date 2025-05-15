@@ -1,16 +1,17 @@
+@use "../abstracts" as abs;
 // =============================================================================
 // Utilidades Responsivas (SM, MD, LG, XL, XXL)
 // =============================================================================
 // Genera clases con breakpoints para cada tamaño
 // Ejemplos: .mt-md-6, .pb-lg-8, .mx-xl-10
-@each $breakpoint, $value in $grid-breakpoints {
+@each $breakpoint, $value in abs.$grid-breakpoints {
   // Saltamos XS porque ya lo generamos arriba
   @if $breakpoint == xs {
-    @include generate-responsive-spacers();
-  } @else {
+    @include abs.generate-responsive-spacers();
+  } @else { 
     @media (min-width: $value) {
       // Prefijo de breakpoint: -sm, -md, etc.
-      @include generate-responsive-spacers("-#{$breakpoint}");
+      @include abs.generate-responsive-spacers("-#{$breakpoint}");
     }
   }
 }

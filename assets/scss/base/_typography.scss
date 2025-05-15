@@ -1,3 +1,6 @@
+// base/_typography.scss
+@use "../abstracts" as abstracts;
+
 // Tipografías base que complementan Bootstrap
 body {
   font-family: 'Open Sans', system-ui, -apple-system, sans-serif;
@@ -10,8 +13,8 @@ h1, .h1 {
   margin-bottom: 1.5rem;
   
   &.entry-title { // Título de entradas/páginas en WordPress
-    color: $primary;
-    border-bottom: 2px solid $primary;
+    color: abstracts.$primary;
+    border-bottom: 2px solid abstracts.$primary;
     padding-bottom: 0.5rem;
   }
 }
@@ -33,7 +36,7 @@ h1, .h1 {
       // @extend .mb-2;
       &::before {
         content: "•";
-        color: $primary;
+        color: abstracts.$primary;
         margin-right: 0.5rem;
       }
     }
@@ -42,7 +45,6 @@ h1, .h1 {
 
 // Bloques de Gutenberg
 .wp-block-quote {
-  // @extend .blockquote;
-  border-left: 4px solid $primary;
+  border-left: 4px solid abstracts.$primary;
   padding-left: 1rem;
 }

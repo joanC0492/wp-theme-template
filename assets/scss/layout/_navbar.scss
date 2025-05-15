@@ -1,3 +1,6 @@
+@use "sass:color";
+@use "../abstracts" as abs;
+
 // Variables para colores y transiciones
 $primary-bg: #ccc;
 $primary-hover-bg: #39b54a7a;
@@ -16,7 +19,7 @@ $padding-inline: 16px;
     &-has-children {
       > .nav-link {
         &::after {
-          @include dropdown-arrow(down);
+          @include abs.dropdown-arrow(down);
         }
       }
 
@@ -30,7 +33,7 @@ $padding-inline: 16px;
           &-has-children {
             > .nav-link {
               &::after {
-                @include dropdown-arrow(right);
+                @include abs.dropdown-arrow(right);
                 position: relative;
                 top: 0.2rem;
                 left: 0;
@@ -83,7 +86,7 @@ $padding-inline: 16px;
       transform: translateY(0);
     }
     // B
-    @media(min-width: 992px){
+    @media (min-width: 992px) {
       max-height: initial;
       overflow: visible;
       // max-height: 500px;
@@ -114,7 +117,12 @@ $padding-inline: 16px;
           background-color: $primary-bg;
           transition: background-color $transition-duration ease-in-out;
           &:hover {
-            background-color: darken($primary-bg, 10%);
+            // background-color: darken($primary-bg, 10%);
+            background-color: color.adjust(
+              $primary-bg,
+              $lightness: -10%,
+              $space: hsl
+            );
           }
         }
 
@@ -136,7 +144,12 @@ $padding-inline: 16px;
             transition: background-color $transition-duration ease-in-out;
 
             &:hover {
-              background-color: darken($secondary-bg, 10%);
+              // background-color: darken($secondary-bg, 10%);
+              background-color: color.adjust(
+                $secondary-bg,
+                $lightness: -10%,
+                $space: hsl
+              );
             }
           }
         }
