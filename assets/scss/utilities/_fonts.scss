@@ -1,0 +1,23 @@
+// =============================================================================
+// Clases de Tipografía Roboto por Peso
+// =============================================================================
+// Genera clases utilitarias para aplicar diferentes pesos de la fuente Roboto
+// Ejemplos: .font-roboto-100, .font-roboto-400, .font-roboto-900
+// =============================================================================
+@each $weight in 100, 200, 300, 400, 500, 600, 700, 800, 900 {
+  .font-roboto-#{$weight} {
+    font-family: "Roboto", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: #{$weight};
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
+  }
+
+  .font-roboto-#{$weight}-italic {
+    font-family: "Roboto", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: #{$weight};
+    font-style: italic;
+    font-variation-settings: "wdth" 100;
+  }
+}

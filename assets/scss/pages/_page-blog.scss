@@ -1,0 +1,41 @@
+.page-slug-blog {
+  $c-border-input: #39b54a;
+  .blog-search {
+    &__container {
+      border: 1px solid $c-border-input;
+      border-radius: 50px;
+      max-width: 922px;
+      width: 100%;
+    }
+    &__btn {
+      border: none;
+      background-color: transparent;
+      padding-left: 25px;
+    }
+    &__input {
+      border: none;
+      padding-block: 17px;
+      background-color: transparent;
+      font-size: 30px;
+      &:focus {
+        box-shadow: none;
+      }
+      @media (max-width: 767px) {
+        font-size: 24px;
+        padding-block: 10px;
+      }
+    }
+    .svg-icon-search {
+      fill: $c-border-input;
+    }
+  }
+
+  .blog-posts {
+    &__container-cards {
+      grid-template-columns: repeat(3, 312px);
+      @media (max-width: 767px) {
+        grid-template-columns: repeat(1, 312px);
+      }
+    }
+  }
+}

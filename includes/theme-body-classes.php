@@ -17,11 +17,13 @@ function jc_custom_body_class($classes)
       $classes[] = $class;
   }
 
+  if (is_home())
+    $classes[] = 'page-slug-blog'; // Clase para la página de inicio del blog  
   if (is_single())
     $classes[] = 'single-slug-all'; // Clase para entradas individuales
   if (is_category())
     $classes[] = 'category-slug-all'; // Clase para páginas de categoría
-  
+
   // Solo si tienes WooCommerce activo
   if (!function_exists('is_woocommerce'))
     return $classes;

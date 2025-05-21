@@ -1,63 +1,65 @@
 (() => {
-  const setActiveMenuItem = () => {
-    const links = document.querySelectorAll(
-      ".menu-item-has-children > .nav-link"
-    );
-    links.forEach((link) => {
-      // Inicializa atributos ARIA
-      link.setAttribute("aria-expanded", "false");
-      const submenu = link.nextElementSibling;
-      if (submenu && submenu.classList.contains("sub-menu"))
-        submenu.setAttribute("aria-hidden", "true");
+  const toggleStickyHeader = () => {
+    const header = document.querySelector("#header");
+    if (!header) return; // Evita errores si no existe
 
-      link.addEventListener("click", (e) => {
-        // Solo prevenir el default si el href es #0
-        if (link.getAttribute("href") === "#0") e.preventDefault();
+    const isSticky = window.scrollY > 36;
+    const alreadySticky = header.classList.contains("sticky-top");
+    // Si el header esta scroll y no tiene class sticky, agregarlo
+    if (isSticky && !alreadySticky) {
+      header.classList.add("sticky-top", "shadow", "bg-white-1");
+      header.classList.remove("position-relative");
+    } else if (!isSticky && alreadySticky) {
+      // Si el header no es sticky y ya tiene la clase, eliminarla
+      header.classList.remove("sticky-top", "shadow", "bg-white-1");
+      header.classList.add("position-relative");
+    }
+  };
 
-        // link ---------> A.nav-link
-        const parentItem = link.closest(".menu-item"); // LI
-        const currentSubMenu = link.nextElementSibling; // UL.sub-menu
+  const initializeMainMenuToggles = () => {
+    // No ejecutar en PC
+    if (window.innerWidth >= 992) return;
+    console.log("ESTOY EN MOBILE");
 
-        // Si ya está abierto, lo cerramos
-        const isOpen = currentSubMenu.classList.contains("open"); // FALSE
+    const toggles = document.querySelectorAll("#menu-main .menu__toggle");
 
-        // Cerrar otros submenús del mismo nivel
-        const siblingItems = Array.from(parentItem.parentElement.children);
-        siblingItems.forEach((item) => {
-          // Si el "item" es disinto al padre que acabamos de clickear y el "item" tiene submenú
-          if (
-            item !== parentItem &&
-            item.classList.contains("menu-item-has-children")
-          ) {
-            // Cerrar el submenú
-            const sub = item.querySelector(".sub-menu");
-            const toggleLink = item.querySelector(".nav-link");
-            if (sub && sub.classList.contains("open")) {
-              sub.classList.remove("open");
-              toggleLink.setAttribute("aria-expanded", "false");
-              sub.setAttribute("aria-hidden", "true");
-            }
-          }
-        });
-
-        // Alternar estado del actual
-        if (!isOpen) {
-          currentSubMenu.classList.add("open");
-          link.setAttribute("aria-expanded", "true");
-          currentSubMenu.setAttribute("aria-hidden", "false");
-        } else {
-          currentSubMenu.classList.remove("open");
-          link.setAttribute("aria-expanded", "false");
-          currentSubMenu.setAttribute("aria-hidden", "true");
-        }
+    toggles.forEach((toggle) => {
+      toggle.addEventListener("click", () => {
+        const parentItem = toggle.closest(".menu__item");
+        const submenu = parentItem.querySelector(".menu__list--submenu");
+        const isOpen = toggle.getAttribute("aria-expanded") === "true";
+        toggle.setAttribute("aria-expanded", String(!isOpen));
+        if (submenu) submenu.style.display = isOpen ? "none" : "block";
       });
+    });
+
+    // Extra: Detecta <a href="#0"> con submenús y actúa como si fuera un toggle
+    const fakeLinks = document.querySelectorAll('.menu__link[href="#0"]');
+
+    fakeLinks.forEach((link) => {
+      const parentItem = link.closest(".menu__item");
+      const toggle = parentItem.querySelector(".menu__toggle");
+      const submenu = parentItem.querySelector(".menu__list--submenu");
+
+      if (toggle && submenu) {
+        link.addEventListener("click", (e) => {
+          e.preventDefault(); // Evita el scroll al top
+          const isOpen = toggle.getAttribute("aria-expanded") === "true";
+          toggle.setAttribute("aria-expanded", String(!isOpen));
+          submenu.style.display = isOpen ? "none" : "block";
+        });
+      }
     });
   };
 
   const initDOMReady = () => {
     console.log("DOM Ready!");
-    setActiveMenuItem();
+    toggleStickyHeader();
+    // MENU MAIN
+    initializeMainMenuToggles();
   };
 
   document.addEventListener("DOMContentLoaded", initDOMReady);
+  window.addEventListener("resize", initializeMainMenuToggles);
+  window.addEventListener("scroll", toggleStickyHeader);
 })();

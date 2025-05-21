@@ -3,14 +3,21 @@
 .site-header {
   background: abs.$primary;
   height: abs.$wp-header-height;
-  
+
   .navbar {
     // Sobreescribe navbar de Bootstrap
     padding: 0;
   }
-  
+
   .custom-logo {
     height: 50px;
     width: auto;
+  }
+}
+#header {
+  &.header {
+    z-index: 9;
+    transition: all 0.35s;
+    background-color: white;
   }
 }

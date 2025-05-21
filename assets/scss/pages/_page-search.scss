@@ -1,0 +1,16 @@
+body.search-results,
+body[class*="category-"] {
+  .search-results {
+    &__container-cards {
+      grid-template-columns: repeat(2, 312px);
+      @media (max-width: 767px) {
+        grid-template-columns: repeat(1, 312px);
+      }
+    }
+  }
+  // .card-blog {
+  //   &__content {
+  //     display: none;
+  //   }
+  // }
+}

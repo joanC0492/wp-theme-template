@@ -7,9 +7,12 @@ if (!defined('ABSPATH'))
 // add_filter('use_block_editor_for_post', '__return_false', 10);
 
 /***************************INCLUDES***************************/
-require_once get_template_directory() . '/includes/index.php';
 /***************************SHORTCODES***************************/
-// require_once get_template_directory() . '/shortcodes/index.php';
+// se ejecuta solo después de que el tema esté cargado
+add_action('after_setup_theme', function () {
+  require_once get_template_directory() . '/includes/index.php';
+  require_once get_template_directory() . '/shortcodes/index.php';
+});
 
 function theme_assets()
 {
@@ -21,13 +24,21 @@ function theme_assets()
     array(), // Sin dependencias
     '5.3.5' // Versión para caché
   );
+  /* Roboto font */
+  wp_enqueue_style(
+    'google-font-roboto-style',
+    'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap',
+    array(),
+    null
+  );
 
   /* My css */
+  $main_css = get_template_directory() . '/assets/css/main.css';
   wp_enqueue_style(
     'jc-main-style',
     get_template_directory_uri() . '/assets/css/main.css',
     array('bootstrap-5.3.5-style'), // Depende de Bootstrap
-    filemtime(get_template_directory() . '/assets/css/main.css') // Evita caché
+    file_exists($main_css) ? filemtime($main_css) : null // Evita caché
   );
   /*************************** JS ***************************/
   wp_enqueue_script(
@@ -39,53 +50,43 @@ function theme_assets()
   );
 
   /* My js */
+  $main_js = get_template_directory() . '/assets/js/main.js';
   wp_enqueue_script(
     'jc-main-script',
     get_template_directory_uri() . '/assets/js/main.js',
     array('bootstrap-5.3.5-bundle'), // Depende de Bootstrap
-    filemtime(get_template_directory() . '/assets/js/main.js'),
+    file_exists($main_js) ? filemtime($main_js) : null, // Evita caché
     true // En el footer
   );
 }
 add_action('wp_enqueue_scripts', 'theme_assets', 5);
 
-
-
-// // JS
-// wp_enqueue_script(
-//   'script',
-//   get_stylesheet_directory_uri() . '/assets/js/script.js',
-//   array('jquery'),
-//   '1.0.0',
-//   true
-// );
-// // Font Awesome
-// wp_enqueue_style(
-//   'font-awesome',
-//   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css',
-//   array(),
-//   '6.0.0-beta3',
-//   'all'
-// );
-// // Google Fonts
-// wp_enqueue_style(
-//   'google-fonts',
-//   'https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap',
-//   array(),
-//   null,
-//   'all'
-// );
-
-
 function init_template()
 {
-  // Agrega el titulo desde el admin wordpress
+  // WordPress maneja automáticamente la etiqueta <title>
   add_theme_support('title-tag');
-  // Agrega la opcion de imagen destacada
+  // Habilita imágenes destacadas en entradas y páginas
   add_theme_support('post-thumbnails');
+  // Usa HTML5 limpio para formularios, comentarios, galerías, scripts, etc.
+  add_theme_support(
+    'html5',
+    array(
+      'search-form',
+      'comment-form',
+      'comment-list',
+      'gallery',
+      'caption',
+      'script',
+      'style'
+    )
+  );
+  // ✅ Hace que videos y contenidos incrustados se adapten a móviles automáticamente.
+  add_theme_support('responsive-embeds');
+
 
   // Habilita la opcion 'Menús'
   // Apariencia > Menús
+  // En Apariencia > Menús podés crear un menú y asignarlo a “Menú Header”.
   register_nav_menus(
     array(
       'header_menu' => 'Menú Header',
@@ -114,45 +115,66 @@ add_action('after_setup_theme', 'init_template');
  * 
  * @see https://developer.wordpress.org/reference/hooks/map_meta_cap/
  */
-add_filter(
-  'map_meta_cap',
-  function ($caps, $cap, $user_id, $args) {
-    $prefix = 'is_page_';
-    $prefix_length = strlen($prefix);
+if (is_admin()) {
+  add_filter(
+    'map_meta_cap',
+    function ($caps, $cap, $user_id, $args) {
+      $prefix = 'is_page_';
+      $prefix_length = strlen($prefix);
 
-    if (
-      $prefix === substr($cap, 0, $prefix_length)
-      && array_key_exists('post', $_GET) // Only applies once a new page has been saved and refreshed.
-    ) {
-      $post_object = get_post(intval($_GET['post']));
+      if (
+        $prefix === substr($cap, 0, $prefix_length)
+        && array_key_exists('post', $_GET) // Only applies once a new page has been saved and refreshed.
+      ) {
+        $post_object = get_post(intval($_GET['post']));
 
-      if ('page' === $post_object->post_type) {
-        $slug_or_id = substr($cap, $prefix_length);
+        if ('page' === $post_object->post_type) {
+          $slug_or_id = substr($cap, $prefix_length);
 
-        if (is_numeric($slug_or_id)) {
-          // The capability is providing an ID in the form is_page_123.
-          if ($post_object->ID !== intval($slug_or_id)) {
-            // If is_page_123 does not match the current page ID being 123, don't allow.
-            $caps = ['do_not_allow'];
+          if (is_numeric($slug_or_id)) {
+            // The capability is providing an ID in the form is_page_123.
+            if ($post_object->ID !== intval($slug_or_id)) {
+              // If is_page_123 does not match the current page ID being 123, don't allow.
+              $caps = ['do_not_allow'];
+            } else {
+              // If the ID does match, require the user have the capability to edit pages.
+              $caps = ['edit_pages'];
+            }
           } else {
-            // If the ID does match, require the user have the capability to edit pages.
-            $caps = ['edit_pages'];
-          }
-        } else {
-          // The capability is providing a slug in the form is_page_contact-us.
-          if ($post_object->post_name !== $slug_or_id) {
-            // If is_page_contact-us does not match the current page slug being contact-us, don't allow.
-            $caps = ['do_not_allow'];
-          } else {
-            // If the slug does match, require the user have the capability to edit pages.
-            $caps = ['edit_pages'];
+            // The capability is providing a slug in the form is_page_contact-us.
+            if ($post_object->post_name !== $slug_or_id) {
+              // If is_page_contact-us does not match the current page slug being contact-us, don't allow.
+              $caps = ['do_not_allow'];
+            } else {
+              // If the slug does match, require the user have the capability to edit pages.
+              $caps = ['edit_pages'];
+            }
           }
         }
       }
-    }
 
-    return $caps;
-  },
-  10,
-  4
-);
+      return $caps;
+    },
+    10,
+    4
+  );
+}
+
+
+
+// Permite mostrar 3 Elementos en el home.php
+function custom_posts_per_page_home($query)
+{
+  if ($query->is_home() && $query->is_main_query()) {
+    $query->set('posts_per_page', 3);
+  }
+}
+add_action('pre_get_posts', 'custom_posts_per_page_home');
+// Permite mostrar 6 Elementos en el category y el search
+function custom_posts_per_page_category($query)
+{
+  if (($query->is_category() || $query->is_search()) && $query->is_main_query()) {
+    $query->set('posts_per_page', 6);
+  }
+}
+add_action('pre_get_posts', 'custom_posts_per_page_category');
