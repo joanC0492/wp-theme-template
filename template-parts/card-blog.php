@@ -1,7 +1,6 @@
 <?php
 $data = get_query_var('card_data', []);
 $url = $data['url'] ?? '#';
-// $image_url = $data['image_url'] ?? '';
 $image_url = $data['image_url'] ? $data['image_url'] : get_template_directory_uri() . '/assets/images/no-thumbnail.webp';
 $title = $data['title'] ?? '';
 $excerpt = $data['excerpt'] ?? '';

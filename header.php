@@ -27,7 +27,7 @@
   ?>
 
   <!-- Header principal -->
-  <header id="header" class="header">
+  <header id="header" class="header position-relative">
     <?php
     render_bem_menu(
       $menu_tree,
