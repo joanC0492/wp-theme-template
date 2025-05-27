@@ -1,0 +1,7 @@
+.footer {
+  background-color: black;
+  color: white;
+  &__logo-img {
+    object-fit: contain;
+  }
+}

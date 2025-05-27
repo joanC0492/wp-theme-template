@@ -14,13 +14,13 @@
   <?php wp_body_open(); ?>
 
   <?php
-  // 
-  $logo_header = ["guid" => "https://avinkape.vtexassets.com/arquivos/logo.png", "post_title" => ""];
-  // 
+  $header_s = get_header_settings_data();
+  // Si no se obtiene el logo, se usa un array vacío
+  $header_logo = $header_s['header_logo'];
+
   $locations = get_nav_menu_locations(); // Obtiene todas las ubicaciones
   $menu_id = $locations['header_menu'];  // Obtiene el ID del menú asignado a 'header_menu'
-  $menu_items = wp_get_nav_menu_items($menu_id); // Ahora sí, trae los ítems
-  
+  $menu_items = wp_get_nav_menu_items($menu_id); // Ahora sí, trae los ítems  
   $menu_tree = [];
   foreach ($menu_items as $item)
     $menu_tree[$item->menu_item_parent][] = $item;
@@ -31,7 +31,7 @@
     <?php
     render_bem_menu(
       $menu_tree,
-      $logo_header
+      $header_logo
     );
     ?>
   </header>
