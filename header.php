@@ -18,12 +18,16 @@
   // Si no se obtiene el logo, se usa un array vacío
   $header_logo = $header_s['header_logo'];
 
-  $locations = get_nav_menu_locations(); // Obtiene todas las ubicaciones
-  $menu_id = $locations['header_menu'];  // Obtiene el ID del menú asignado a 'header_menu'
-  $menu_items = wp_get_nav_menu_items($menu_id); // Ahora sí, trae los ítems  
   $menu_tree = [];
-  foreach ($menu_items as $item)
-    $menu_tree[$item->menu_item_parent][] = $item;
+  $locations = get_nav_menu_locations(); // Obtiene todas las ubicaciones
+  $menu_id = !empty($locations['header_menu']) ? $locations['header_menu'] : false;  // Verifica si existe la clave
+  if ($menu_id) {
+    $menu_items = wp_get_nav_menu_items($menu_id); // Trae los ítems si hay menú
+    if ($menu_items && is_array($menu_items)) {
+      foreach ($menu_items as $item)
+        $menu_tree[$item->menu_item_parent][] = $item;
+    }
+  }
   ?>
 
   <!-- Header principal -->
@@ -35,4 +39,4 @@
     );
     ?>
   </header>
-  <main id="app" class="app">
+  <main id="app" class="app"></main>

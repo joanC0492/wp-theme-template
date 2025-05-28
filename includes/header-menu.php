@@ -31,11 +31,13 @@ function render_bem_menu($menu_tree, $logo_header)
     return $output;
   }
 
+  $logo_src = !empty($logo_header['guid']) ? esc_url($logo_header['guid']) : get_template_directory_uri() . '/assets/images/no-thumbnail.webp';
+  $logo_alt = !empty($logo_header['post_title']) ? esc_attr($logo_header['post_title']) : 'Logo';
   echo '<div id="menu-main">';
   echo '  <nav class="menu navbar navbar-expand-lg" aria-label="Main navigation">';
   echo '    <div class="container-xxl">';
   echo '      <a class="navbar-brand py-3" href="' . esc_url(home_url('/')) . '">';
-  echo '        <img src="' . esc_url($logo_header['guid']) . '" alt="' . esc_attr($logo_header['post_title']) . '" class="img-fluid" width="156" />';
+  echo '        <img src="' . $logo_src . '" alt="' . $logo_alt . '" class="img-fluid" width="156" />';
   echo '      </a>';
   echo '      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContentMobile" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>';
   echo '      <div class="collapse navbar-collapse" id="navbarSupportedContentMobile">';
