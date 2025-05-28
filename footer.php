@@ -6,6 +6,8 @@ $mensaje_whatsapp = $footer_s['mensaje_whatsapp'];
 $footer_logo = $footer_s['footer_logo'];
 $footer_descripcion = $footer_s['footer_descripcion'];
 $footer_columnas = $footer_s['footer_columnas'];
+
+$is_libro_reclamaciones = !empty(get_page_by_path('libro-de-reclamaciones'));
 ?>
 </pre>
 </main> <!-- -->
@@ -45,6 +47,16 @@ $footer_columnas = $footer_s['footer_columnas'];
           </div>
           <div class="col-lg-5">
             <div class="footer__col footer__contacto hide-br text-white-1 acumin-variable-concept-thin lh-2 mt-4">
+              <?php if ($is_libro_reclamaciones): ?>
+                <div class="mt-3">
+                  <a href="<?= esc_url(home_url('/libro-de-reclamaciones')) ?>"
+                    class="d-flex align-items-center text-decoration-none">
+                    <span class="text-white me-1">Libro de reclamaciones</span>
+                    <img src="<?= get_template_directory_uri() ?>/assets/images/libro-de-reclamaciones.webp"
+                      alt="Icono del libro de reclamaciones" width="39" height="15" />
+                  </a>
+                </div>
+              <?php endif; ?>
             </div>
           </div>
         </div>

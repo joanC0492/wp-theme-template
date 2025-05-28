@@ -52,11 +52,36 @@
     });
   };
 
+  const initializeYouTubeLazyLoad = () => {
+    document.querySelectorAll(".youtube-lazy").forEach(function (el) {
+      el.addEventListener("click", function () {
+        const id = this.getAttribute("data-id");
+        const iframe = document.createElement("iframe");
+        iframe.setAttribute(
+          "src",
+          "https://www.youtube.com/embed/" + id + "?autoplay=1"
+        );
+        iframe.setAttribute("frameborder", "0");
+        iframe.setAttribute("allowfullscreen", "1");
+        iframe.setAttribute(
+          "allow",
+          "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        );
+        iframe.classList.add("w-100", "h-100");
+        this.innerHTML = "";
+        this.appendChild(iframe);
+      });
+    });
+  };
+
   const initDOMReady = () => {
     console.log("DOM Ready!");
+    // STICKY HEADER
     toggleStickyHeader();
-    // MENU MAIN
+    // MENU MAIN OPEN-CLOSE TOGGLES
     initializeMainMenuToggles();
+    // YOUTUBE
+    initializeYouTubeLazyLoad();
   };
 
   document.addEventListener("DOMContentLoaded", initDOMReady);

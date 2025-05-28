@@ -23,17 +23,9 @@
         <?php while (have_posts()): ?>
           <?php the_post(); ?>
           <article class="">
-            <?php
-            $data = [
-              'url' => get_permalink(),
-              'image_url' => has_post_thumbnail() ? get_the_post_thumbnail_url(get_the_ID(), 'medium') : '',
-              'title' => get_the_title(),
-              'excerpt' => get_the_excerpt(),
-            ];
-            // Lo incluís y pasás las variables
-            set_query_var('card_data', $data);
-            get_template_part('template-parts/card-blog');
-            ?>
+            <?php $data = get_card_blog_data(); ?>
+            <?php set_query_var('card_data', $data); ?>
+            <?php get_template_part('template-parts/card-blog'); ?>
           </article>
         <?php endwhile; ?>
         <?php the_posts_pagination([
