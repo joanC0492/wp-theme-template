@@ -89,7 +89,7 @@
 
       <!-- Testimonios HOME -->
       <?php if (!empty($seccion_testimonios) && is_array($seccion_testimonios)): ?>
-        <section class="testimonios-seccion py-5" id="testimonios-seccion">
+        <section class="testimonios-seccion pt-5" id="testimonios-seccion">
           <div class="container">
             <div class="row">
               <div class="col-12">
@@ -111,6 +111,49 @@
           </div>
         </section>
       <?php endif; ?>
+
+      <!-- Testimonios por "tipo_de_testimonios" AJAX -->
+      <section class="testimonios-filtrados pt-5" id="testimonios-filtrados">
+        <div class="container">
+          <div class="row mb-4">
+            <div class="col-12 text-center">
+              <h2 class="h1 mb-3">Filtrar Testimonios por Categoría</h2>
+              <select id="filtro-tipo-testimonio" class="form-select w-auto d-inline-block">
+                <option value="0">Todos</option>
+                <?php foreach ($tipos_testimonios as $term): ?>
+                  <option value="<?= esc_attr($term->term_id); ?>"><?= esc_html($term->name); ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+          </div>
+          <div class="row" id="contenedor-testimonios-filtrados">
+            <?php
+            // Mostrar todos los testimonios por defecto
+            $args = array(
+              'post_type' => 'testimonio',
+              'posts_per_page' => -1,
+              'post_status' => 'publish',
+              'orderby' => 'date',
+              'order' => 'DESC',
+            );
+            $query = new WP_Query($args);
+            if ($query->have_posts()):
+              while ($query->have_posts()):
+                $query->the_post();
+                $card_youtube_data = get_card_youtube_data(get_the_ID());
+                set_query_var('card_youtube_data', $card_youtube_data);
+                ?>
+                <div class="col-lg-4 mb-4 mb-lg-0 testimonials__video">
+                  <?php get_template_part('template-parts/card-youtube'); ?>
+                </div>
+              <?php endwhile;
+              wp_reset_postdata();
+            endif;
+            ?>
+          </div>
+        </div>
+      </section>
+
 
       <!-- Categorias Testimonios ALL -->
       <?php if (!empty($tipos_testimonios) && !is_wp_error($tipos_testimonios)): ?>
@@ -175,7 +218,6 @@
           </div>
         </section>
       <?php endif; ?>
-
 
       <!-- Preguntas Frecuentes ALL -->
       <?php if ($faq->have_posts()): ?>

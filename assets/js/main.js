@@ -74,6 +74,37 @@
     });
   };
 
+  const filterTestimoniosAjax = () => {
+    const filtro = document.getElementById("filtro-tipo-testimonio");
+    const contenedor = document.getElementById(
+      "contenedor-testimonios-filtrados"
+    );
+
+    if (!filtro || !contenedor) return; // Evita errores si no existen
+
+    filtro.addEventListener("change", () => {
+      const categoriaId = filtro.value;
+
+      fetch(frontend_ajax.url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        },
+        body: new URLSearchParams({
+          action: "filtrar_testimonios",
+          categoria_id: categoriaId,
+        }),
+      })
+        .then((response) => response.text())
+        .then((html) => {
+          contenedor.innerHTML = html;
+        })
+        .catch((error) => {
+          console.error("Error en la petición AJAX:", error);
+        });
+    });
+  };
+
   const initDOMReady = () => {
     console.log("DOM Ready!");
     // STICKY HEADER
@@ -82,6 +113,8 @@
     initializeMainMenuToggles();
     // YOUTUBE
     initializeYouTubeLazyLoad();
+    // Testimonios AJAX
+    filterTestimoniosAjax();
   };
 
   document.addEventListener("DOMContentLoaded", initDOMReady);

@@ -74,6 +74,15 @@ function theme_assets()
     file_exists($main_js) ? filemtime($main_js) : null, // Evita caché
     true // En el footer
   );
+
+  // Habilita el uso de AJAX en el tema
+  wp_localize_script(
+    'jc-main-script',
+    'frontend_ajax',
+    [
+      'url' => admin_url('admin-ajax.php'),
+    ]
+  );
 }
 add_action('wp_enqueue_scripts', 'theme_assets', 5);
 
@@ -128,3 +137,54 @@ function custom_posts_per_page_category($query)
   }
 }
 add_action('pre_get_posts', 'custom_posts_per_page_category');
+
+
+/* AJAX para filtrar testimonios */
+function filtrar_testimonios_callback()
+{
+  // Verifica si la solicitud es AJAX
+  $categoria_id = intval($_POST['categoria_id']);
+
+  $args = [
+    'post_type' => 'testimonio',
+    'posts_per_page' => -1,
+    'post_status' => 'publish',
+    'orderby' => 'date',
+    'order' => 'DESC',
+  ];
+
+  // Si es 0 esta seleccionado "Todos los testimonios"
+  if ($categoria_id !== 0) {
+    $args['tax_query'] = [
+      [
+        'taxonomy' => 'tipo_de_testimonios',
+        'field' => 'term_id',
+        'terms' => $categoria_id,
+      ]
+    ];
+  }
+
+  $query = new WP_Query($args);
+
+  ob_start();
+  if ($query->have_posts()):
+    while ($query->have_posts()):
+      $query->the_post();
+      $card_youtube_data = get_card_youtube_data(get_the_ID());
+      set_query_var('card_youtube_data', $card_youtube_data);
+      ?>
+      <div class="col-lg-4 mb-4 mb-lg-0 testimonials__video">
+        <?php get_template_part('template-parts/card-youtube'); ?>
+      </div>
+      <?php
+    endwhile;
+    wp_reset_postdata();
+  else:
+    echo '<div class="col-12"><p>No se encontraron testimonios.</p></div>';
+  endif;
+
+  echo ob_get_clean();
+  wp_die();
+}
+add_action('wp_ajax_filtrar_testimonios', 'filtrar_testimonios_callback');
+add_action('wp_ajax_nopriv_filtrar_testimonios', 'filtrar_testimonios_callback');
