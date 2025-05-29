@@ -23,6 +23,12 @@
     /* Page Home - Campo Personalizado */
     $seccion_testimonios = get_post_meta($id, 'seccion_testimonios', false);
 
+    /* Obtenemos las taxonomies tipo_de_testimonios*/
+    $tipos_testimonios = get_terms([
+      'taxonomy' => 'tipo_de_testimonios',
+      'hide_empty' => false,
+    ]);
+
     /* CPT Preguntas Frecuentes */
     $args_faq = array(
       'post_type' => 'preguntas_frecuentes',
@@ -46,6 +52,7 @@
     ?>
 
     <div class="front-page">
+      <!-- Hero HOME -->
       <?php if ($hero_post): ?>
         <section class="" id="">
           <?php
@@ -56,6 +63,7 @@
         </section>
       <?php endif; ?>
 
+      <!-- Testimonios ALL -->
       <?php if ($testimonios->have_posts()): ?>
         <section class="testimonios pt-5" id="testimonios">
           <div class="container">
@@ -79,6 +87,7 @@
         </section>
       <?php endif; ?>
 
+      <!-- Testimonios HOME -->
       <?php if (!empty($seccion_testimonios) && is_array($seccion_testimonios)): ?>
         <section class="testimonios-seccion py-5" id="testimonios-seccion">
           <div class="container">
@@ -103,8 +112,74 @@
         </section>
       <?php endif; ?>
 
+      <!-- Categorias Testimonios ALL -->
+      <?php if (!empty($tipos_testimonios) && !is_wp_error($tipos_testimonios)): ?>
+        <section class="tipos-testimonios py-5" id="tipos-testimonios">
+          <div class="container">
+            <div class="row">
+              <div class="col-12">
+                <h2 class="h1 text-center mb-5">Tipos de Testimonios</h2>
+              </div>
+              <?php foreach ($tipos_testimonios as $term): ?>
+                <?php
+                // Campos personalizados de la taxonomía
+                $titulo = get_term_meta($term->term_id, 'titulo', true);
+                $nueva_imagen_id = get_term_meta($term->term_id, 'nueva_imagen', true);
+                $nuevo_carousel_ids = get_term_meta($term->term_id, 'nuevo_carousel', false);
+
+                $nueva_imagen_url = '';
+                if ($nueva_imagen_id) {
+                  $nueva_imagen_src = wp_get_attachment_image_src($nueva_imagen_id, 'medium');
+                  $nueva_imagen_url = $nueva_imagen_src ? $nueva_imagen_src[0] : '';
+                }
+                ?>
+                <div class="col-md-6 col-lg-4 mb-4">
+                  <div class="card h-100">
+                    <?php if ($nueva_imagen_url): ?>
+                      <img src="<?= esc_url($nueva_imagen_url); ?>" class="card-img-top" alt="<?= esc_attr($term->name); ?>">
+                    <?php endif; ?>
+                    <div class="card-body">
+                      <h3 class="card-title"><?= esc_html($term->name); ?></h3>
+                      <p class="card-text"><strong>Url:</strong> <?= esc_html(get_term_link($term)) ?></p>
+                      <p class="card-text"><strong>Slug:</strong> <?= esc_html($term->slug); ?></p>
+                      <?php if ($term->description): ?>
+                        <p class="card-text"><?= esc_html($term->description); ?></p>
+                      <?php endif; ?>
+                      <?php if ($titulo): ?>
+                        <p class="card-text"><strong>Título:</strong> <?php echo esc_html($titulo); ?></p>
+                      <?php endif; ?>
+                      <?php if (!empty($nuevo_carousel_ids)): ?>
+                        <div class="carousel-gallery mb-2">
+                          <strong>Galería:</strong>
+                          <div class="d-flex flex-wrap gap-2 mt-2">
+                            <?php foreach ($nuevo_carousel_ids as $nuevo_carousel_id): ?>
+                              <?php
+                              $carousel_imagen_src = wp_get_attachment_image_src($nuevo_carousel_id, 'thumbnail');
+                              $carousel_url = $carousel_imagen_src ? $carousel_imagen_src[0] : '';
+                              $carousel_title = get_the_title($nuevo_carousel_id);
+                              ?>
+                              <?php if (!empty($carousel_url)): ?>
+                                <img src="<?= esc_url($carousel_url); ?>" alt="<?= esc_attr($carousel_title) ?>"
+                                  style="max-width:70px;max-height:70px;object-fit:cover;">
+                              <?php endif; ?>
+                            <?php endforeach; ?>
+                          </div>
+                        </div>
+                      <?php endif; ?>
+                      <a href="<?= esc_url(get_term_link($term)); ?>" class="btn btn-primary mt-2">Ver más</a>
+                    </div>
+                  </div>
+                </div>
+              <?php endforeach; ?>
+            </div>
+          </div>
+        </section>
+      <?php endif; ?>
+
+
+      <!-- Preguntas Frecuentes ALL -->
       <?php if ($faq->have_posts()): ?>
-        <section id="reguntas-frecuentes" class="preguntas-frecuentes py-5">
+        <section id="preguntas-frecuentes" class="preguntas-frecuentes py-5">
           <div class="container">
             <div class="row">
               <div class="col-12">
@@ -127,6 +202,7 @@
         </section>
       <?php endif; ?>
 
+      <!-- Preguntas Frecuentes del HOME -->
       <?php if (!empty($seccion_faq) && is_array($seccion_faq)): ?>
         <section id="preguntas-frecuentes-home" class="preguntas-frecuentes-home py-5">
           <div class="container">
@@ -171,7 +247,6 @@
           </div>
         </section>
       <?php endif; ?>
-
 
     </div>
   <?php endwhile; ?>
