@@ -4,6 +4,16 @@
 
 Este es un tema base para WordPress pensado para crear blogs modernos y personalizables de forma rápida. Incluye buenas prácticas, estructura modular y herramientas para desarrollo ágil.
 
+---
+
+## Requisitos previos
+- WordPress 6.0 o superior
+- PHP 7.4 o superior
+- Composer
+- Sass (Dart Sass recomendado)
+
+---
+
 ## Instalación rápida
 
 1. **Clona o descarga este repositorio en tu carpeta de temas de WordPress.**
@@ -29,6 +39,15 @@ Este es un tema base para WordPress pensado para crear blogs modernos y personal
 
 ---
 
+## Estructura del proyecto
+- `assets/`: Recursos estáticos (SCSS, CSS, JS, imágenes)
+- `includes/`: Funciones y helpers PHP reutilizables
+- `template-parts/`: Partes de plantilla reutilizables (cards, secciones, loops)
+- `shortcodes/`: Shortcodes personalizados
+- `pods/` y `ninja-forms/`: Integraciones y configuraciones de plugins
+
+---
+
 ## Características principales
 - Estructura lista para producción y desarrollo.
 - Modularización en includes/ y template-parts/.
@@ -38,9 +57,21 @@ Este es un tema base para WordPress pensado para crear blogs modernos y personal
 
 ---
 
+## Ejemplo: Añadir un nuevo template-part
+1. Crea un archivo en `template-parts/`, por ejemplo `mi-bloque.php`.
+2. Inclúyelo en tu plantilla con:
+   ```php
+   get_template_part('template-parts/mi-bloque');
+   ```
+
+---
+
 ## ¿Para qué sirve este tema?
 Este tema está pensado como base para crear nuevos blogs WordPress de forma rápida, reutilizando componentes y estructura. Puedes personalizarlo fácilmente para tus futuros proyectos.
 
 ---
+
+## Licencia
+MIT
 
 **¡Listo para crear tu próximo blog con WordPress!**
