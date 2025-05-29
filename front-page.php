@@ -151,6 +151,9 @@
             endif;
             ?>
           </div>
+          <div class="loader-1__parent d-none" id="loader-testimonios">
+            <span class="loader-1"></span>
+          </div>
         </div>
       </section>
 

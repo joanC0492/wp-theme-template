@@ -79,12 +79,14 @@
     const contenedor = document.getElementById(
       "contenedor-testimonios-filtrados"
     );
+    const loader = document.querySelector("#loader-testimonios");
 
     if (!filtro || !contenedor) return; // Evita errores si no existen
 
     filtro.addEventListener("change", () => {
       const categoriaId = filtro.value;
-
+      loader.classList.remove("d-none");
+      contenedor.classList.add("d-none");
       fetch(frontend_ajax.url, {
         method: "POST",
         headers: {
@@ -101,6 +103,10 @@
         })
         .catch((error) => {
           console.error("Error en la petición AJAX:", error);
+        })
+        .finally(() => {
+          loader.classList.add("d-none");
+          contenedor.classList.remove("d-none");
         });
     });
   };
