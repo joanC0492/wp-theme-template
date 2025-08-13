@@ -1,5 +1,8 @@
+<!-- 
+Páginas > Todas las páginas > ${Page} — Página de entradas
+https://avinka.local/blog/
+-->
 <?php get_header(); ?>
-
 
 <!-- Busqueda -->
 <div id="blog-search" class="blog-search mt-4 mb-5">

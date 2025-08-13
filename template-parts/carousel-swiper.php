@@ -21,6 +21,7 @@ $class_suffix = $data['class_suffix'] ?? '';
 <script>
   (() => {
     document.addEventListener("DOMContentLoaded", () => {
+      console.log("TEST MESSAGE")
       const swiper = new Swiper(".mySwiper<?= $class_suffix ?>", {
         slidesPerView: 1,
         spaceBetween: 30,

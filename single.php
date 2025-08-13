@@ -1,3 +1,8 @@
+<!-- 
+Entradas > Todas las entradas > Posts individuales
+https://avinka.local/${slug}
+Ejemplo: https://avinka.local/cupiditate-placeat-ad-id-et-quaerat/
+-->
 <?php get_header(); ?>
 
 <section class="single-post py-5">

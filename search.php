@@ -1,3 +1,7 @@
+<!--
+Se buscas en las entradas: (Entradas > Todas las entradas)
+https://avinka.local/?s=cupiditate
+-->
 <?php get_header(); ?>
 <?php
 $archive_title = 'Resultados de búsqueda: "' . get_search_query() . '"';
