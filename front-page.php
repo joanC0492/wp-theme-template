@@ -7,14 +7,14 @@ https://avinka.local/
   <?php while (have_posts()): ?>
     <?php the_post(); ?>
     <?php
-    
+
     // Obtenemos el ID del post asignado al carousel
     $id = get_the_ID();
-    
+
     // Obtenemos el ID del post asignado al carousel
     // carousel es un campo personalizado de post_type=hero
     $carousel_id = get_post_meta($id, 'carousel', true);
-    
+
     // Obtenemos el post del carousel
     $hero_post = !empty($carousel_id) ? get_post($carousel_id) : null;
 
@@ -34,6 +34,12 @@ https://avinka.local/
     /* Obtenemos las taxonomies tipo_de_testimonios*/
     $tipos_testimonios = get_terms([
       'taxonomy' => 'tipo_de_testimonios',
+      'hide_empty' => false,
+    ]);
+
+    /* Obtenemos las taxonomies valoracion_testimonio*/
+    $valoracion_testimonios = get_terms([
+      'taxonomy' => 'valoracion_testimonio',
       'hide_empty' => false,
     ]);
 
@@ -160,6 +166,58 @@ https://avinka.local/
             ?>
           </div>
           <div class="loader-1__parent d-none" id="loader-testimonios">
+            <span class="loader-1"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Testimonios Multiples "tipo_de_testimonios" AJAX -->
+      <section class="testimonios-multiple-filtrados pt-5" id="testimonios-multiple-filtrados">
+        <div class="container">
+          <div class="row mb-4">
+            <div class="col-12 text-center">
+              <h2 class="h1 mb-3">Filtración Multiple de Testimonios por Categoría y valoracion</h2>
+              <select id="filtro-multiple-tipo-testimonio" class="form-select w-auto d-inline-block">
+                <option value="0">Todos</option>
+                <?php foreach ($tipos_testimonios as $term): ?>
+                  <option value="<?= esc_attr($term->term_id); ?>"><?= esc_html($term->name); ?></option>
+                <?php endforeach; ?>
+              </select>
+              <!--  -->
+              <select id="filtro-multiple-tipo-valoracion" class="form-select w-auto d-inline-block ms-3">
+                <option value="0">Todos</option>
+                <?php foreach ($valoracion_testimonios as $term): ?>
+                  <option value="<?= esc_attr($term->term_id); ?>"><?= esc_html($term->name); ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+          </div>
+          <div class="row" id="contenedor-testimonios-multiple-filtrados">
+            <?php
+            // Mostrar todos los testimonios por defecto
+            $args = array(
+              'post_type' => 'testimonio',
+              'posts_per_page' => -1,
+              'post_status' => 'publish',
+              'orderby' => 'date',
+              'order' => 'DESC',
+            );
+            $query = new WP_Query($args);
+            if ($query->have_posts()):
+              while ($query->have_posts()):
+                $query->the_post();
+                $card_youtube_data = get_card_youtube_data(get_the_ID());
+                set_query_var('card_youtube_data', $card_youtube_data);
+                ?>
+                <div class="col-lg-4 mb-4 mb-lg-0 testimonials__video">
+                  <?php get_template_part('template-parts/card-youtube'); ?>
+                </div>
+              <?php endwhile;
+              wp_reset_postdata();
+            endif;
+            ?>
+          </div>
+          <div class="loader-1__parent loader-testimonios d-none" id="loader-testimonios">
             <span class="loader-1"></span>
           </div>
         </div>

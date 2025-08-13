@@ -113,6 +113,58 @@
     });
   };
 
+  const filterMultipleTestimoniosAjax = () => {
+    const filtroTipo = document.getElementById(
+      "filtro-multiple-tipo-testimonio"
+    );
+    const filtroValoracion = document.getElementById(
+      "filtro-multiple-tipo-valoracion"
+    );
+    const contenedor = document.getElementById(
+      "contenedor-testimonios-multiple-filtrados"
+    );
+    // const loader = document.querySelector("#loader-testimonios");
+
+    if (!filtroTipo || !filtroValoracion || !contenedor) return; // Evita errores si no existen
+
+    const fetchData = () => {
+      const tipoId = filtroTipo.value;
+      const valoracionId = filtroValoracion.value;
+
+      const loader = contenedor.nextElementSibling;
+
+      loader.classList.remove("d-none");
+      contenedor.classList.add("d-none");
+
+      fetch(frontend_ajax.url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        },
+        body: new URLSearchParams({
+          action: "filtrar_multiple_testimonios",
+          tipo_id: tipoId,
+          valoracion_id: valoracionId,
+        }),
+      })
+        .then((response) => response.text())
+        .then((html) => {
+          contenedor.innerHTML = html;
+        })
+        .catch((error) => {
+          console.error("Error en la petición AJAX:", error);
+        })
+        .finally(() => {
+          loader.classList.add("d-none");
+          contenedor.classList.remove("d-none");
+        });
+    };
+
+    // Ejecutar cuando cambie cualquiera de los dos selects
+    filtroTipo.addEventListener("change", fetchData);
+    filtroValoracion.addEventListener("change", fetchData);
+  };
+
   const initDOMReady = () => {
     console.log("DOM Ready main.js!");
     // STICKY HEADER
@@ -123,6 +175,8 @@
     initializeYouTubeLazyLoad();
     // Testimonios AJAX
     filterTestimoniosAjax();
+    // Testimonios Multiple AJAX
+    filterMultipleTestimoniosAjax();
   };
 
   document.addEventListener("DOMContentLoaded", initDOMReady);

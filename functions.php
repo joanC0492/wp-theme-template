@@ -190,3 +190,75 @@ function filtrar_testimonios_callback()
 }
 add_action('wp_ajax_filtrar_testimonios', 'filtrar_testimonios_callback');
 add_action('wp_ajax_nopriv_filtrar_testimonios', 'filtrar_testimonios_callback');
+
+
+/* AJAX para filtracion multiple de testimonios */
+function filtrar_multiple_testimonios_callback()
+{
+  // Verifica si la solicitud es AJAX
+  $tipo_id = isset($_POST['tipo_id']) ? intval($_POST['tipo_id']) : 0;
+  $valoracion_id = isset($_POST['valoracion_id']) ? intval($_POST['valoracion_id']) : 0;
+
+  $args = [
+    'post_type' => 'testimonio',
+    'posts_per_page' => -1,
+    'post_status' => 'publish',
+    'orderby' => 'date',
+    'order' => 'DESC',
+  ];
+
+  // Construir tax_query dinámicamente
+  $tax_query = [];
+
+  // Si es 0 esta seleccionado "Todos los testimonios"
+  if ($tipo_id !== 0) {
+    $tax_query[] = [
+      [
+        'taxonomy' => 'tipo_de_testimonios',
+        'field' => 'term_id',
+        'terms' => $tipo_id,
+      ]
+    ];
+  }
+  // Si es 0 esta seleccionado "Todos los testimonios"
+  if ($valoracion_id !== 0) {
+    $tax_query[] = [
+      'taxonomy' => 'valoracion_testimonio',
+      'field' => 'term_id',
+      'terms' => $valoracion_id,
+    ];
+  }
+
+  // 
+  if (!empty($tax_query)) {
+    // Si hay más de una taxonomía, establecer relación
+    if (count($tax_query) > 1) {
+      $tax_query['relation'] = 'AND';
+    }
+    $args['tax_query'] = $tax_query;
+  }
+
+  $query = new WP_Query($args);
+
+  ob_start();
+  if ($query->have_posts()):
+    while ($query->have_posts()):
+      $query->the_post();
+      $card_youtube_data = get_card_youtube_data(get_the_ID());
+      set_query_var('card_youtube_data', $card_youtube_data);
+      ?>
+      <div class="col-lg-4 mb-4 mb-lg-0 testimonials__video">
+        <?php get_template_part('template-parts/card-youtube'); ?>
+      </div>
+      <?php
+    endwhile;
+    wp_reset_postdata();
+  else:
+    echo '<div class="col-12"><p>No se encontraron testimonios.</p></div>';
+  endif;
+
+  echo ob_get_clean();
+  wp_die();
+}
+add_action('wp_ajax_filtrar_multiple_testimonios', 'filtrar_multiple_testimonios_callback');
+add_action('wp_ajax_nopriv_filtrar_multiple_testimonios', 'filtrar_multiple_testimonios_callback');
