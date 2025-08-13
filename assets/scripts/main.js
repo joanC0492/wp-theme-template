@@ -53,24 +53,26 @@
   };
 
   const initializeYouTubeLazyLoad = () => {
-    document.querySelectorAll(".youtube-lazy").forEach(function (el) {
-      el.addEventListener("click", function () {
-        const id = this.getAttribute("data-id");
-        const iframe = document.createElement("iframe");
-        iframe.setAttribute(
-          "src",
-          "https://www.youtube.com/embed/" + id + "?autoplay=1"
-        );
-        iframe.setAttribute("frameborder", "0");
-        iframe.setAttribute("allowfullscreen", "1");
-        iframe.setAttribute(
-          "allow",
-          "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        );
-        iframe.classList.add("w-100", "h-100");
-        this.innerHTML = "";
-        this.appendChild(iframe);
-      });
+    // Click en cualquier parte de la pagina
+    document.addEventListener("click", function (e) {
+      const target = e.target.closest(".youtube-lazy");
+      if (!target) return;
+
+      const id = target.getAttribute("data-id");
+      const iframe = document.createElement("iframe");
+      iframe.setAttribute(
+        "src",
+        "https://www.youtube.com/embed/" + id + "?autoplay=1"
+      );
+      iframe.setAttribute("frameborder", "0");
+      iframe.setAttribute("allowfullscreen", "1");
+      iframe.setAttribute(
+        "allow",
+        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      );
+      iframe.classList.add("w-100", "h-100");
+      target.innerHTML = "";
+      target.appendChild(iframe);
     });
   };
 
